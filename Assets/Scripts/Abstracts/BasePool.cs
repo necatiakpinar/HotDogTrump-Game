@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using Interfaces;
 using Misc;
 using UnityEngine;
+using Task = System.Threading.Tasks.Task;
 
 namespace Abstracts
 {
     public class BasePool<T> : MonoBehaviour where T : MonoBehaviour, IPoolable<T>
     {
         [SerializeField] private List<PoolObject<T>> _poolObjects;
-        
+
         private Dictionary<IngredientType, Queue<T>> _poolDictionary;
         private Dictionary<IngredientType, T> _prefabDictionary;
 
@@ -23,8 +24,26 @@ namespace Abstracts
                 _poolDictionary[poolObject.IngredientType] = new Queue<T>();
                 _prefabDictionary[poolObject.IngredientType] = poolObject.ObjectPf;
             }
+            
+            Init();
         }
-        
+
+        private void Init()
+        {
+            for (int i = 0; i < _poolObjects.Count; i++)
+            {
+                var poolObject = _poolObjects[i];
+                _poolDictionary[poolObject.IngredientType] = new Queue<T>();
+                var prefab = poolObject.ObjectPf;
+                for (int j = 0; j < poolObject.Size; j++)
+                {
+                    var createdPoolObject = Instantiate(prefab, transform);
+                    _poolDictionary[poolObject.IngredientType].Enqueue(createdPoolObject);
+                    createdPoolObject.gameObject.SetActive(false);
+                }
+            }
+        }
+
         public T SpawnFromPool(IngredientType ingredientType, Vector3 position, Quaternion rotation = default, Transform parent = null)
         {
             if (!_poolDictionary.TryGetValue(ingredientType, out var objectQueue))
@@ -53,13 +72,13 @@ namespace Abstracts
 
             if (parent != null)
                 objectToSpawn.transform.SetParent(parent);
-            
+
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
             objectToSpawn.gameObject.SetActive(true);
-            
+
             objectToSpawn.OnSpawn();
-            
+
             return objectToSpawn;
         }
 
@@ -70,10 +89,10 @@ namespace Abstracts
                 Debug.LogWarning($"No pool with ID {ingredientType} found!");
                 return;
             }
-            
+
             poolObject.gameObject.SetActive(false);
             _poolDictionary[ingredientType].Enqueue(poolObject);
-            
+
         }
 
     }
