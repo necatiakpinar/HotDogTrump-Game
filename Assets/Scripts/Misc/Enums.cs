@@ -12,6 +12,12 @@
         HamburgerBread = 291851,
     }
     
+    public enum FoodType
+    {
+        HotDog,
+        Hamburger,
+    }
+    
     public enum IngredientResourceType
     {
         HotDogBreadResource,
