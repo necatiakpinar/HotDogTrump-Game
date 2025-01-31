@@ -1,6 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Abstracts;
+using Controllers;
+using Cysharp.Threading.Tasks;
 using Foods;
 using Managers;
 using Misc;
@@ -8,25 +10,38 @@ using UnityEngine;
 
 public class PrepareAreaManager : MonoBehaviour
 {
+    [SerializeField] private List<IngredientPlacementSlotController> _hotDogPlacementSlots;
+    [SerializeField] private List<IngredientPlacementSlotController> _hamburgerPlacementSlots;
+    
     private Dictionary<FoodType, List<BaseFood>> _foods = new();
 
     private readonly int _maxHotDogAmount = 3;
     private readonly int _maxHamburgerAmount = 3;
 
-    void Start()
+    private void OnEnable()
     {
-        var bread = EventManager.OnSpawnFromBreadPool.Invoke(IngredientType.HamburgerBread, Vector3.zero, Quaternion.identity, null);
+        EventManager.OnIngredientResourceCreated += TryToCreateFood;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDestroy()
     {
-
+        EventManager.OnIngredientResourceCreated -= TryToCreateFood;
     }
 
-    public void TryToCreateFood(BaseIngredient bread)
+    async void  Start()
     {
-        if (bread.IngredientType == IngredientType.HotDogBread)
+        await Init();
+    }
+
+    private async UniTask Init()
+    {
+        
+    }
+    
+    public void TryToCreateFood(IngredientType ingredientType)
+    {
+        //
+        if (ingredientType == IngredientType.HotDogBread)
         {
             if (!_foods.TryGetValue(FoodType.HotDog, out var hotdogs))
             {
@@ -36,16 +51,19 @@ public class PrepareAreaManager : MonoBehaviour
 
             if (hotdogs.Count < _maxHotDogAmount)
             {
+                var bread = EventManager.OnSpawnFromBreadPool.Invoke(IngredientType.HotDogBread, Vector3.zero, Quaternion.identity, null);
                 var hotDog = new HotDogFood();
                 hotDog.AddIngredient(bread);
                 hotdogs.Add(hotDog);
+                var availableSlot = GetAvailableHotDogBreadPlacementSlot();
+                availableSlot.SetIngredient(bread);
             }
             else
             {
                 Debug.LogWarning("Hot dog limit reached!");
             }
         }
-        else if (bread.IngredientType == IngredientType.HamburgerBread)
+        else if (ingredientType == IngredientType.HamburgerBread)
         {
             if (!_foods.TryGetValue(FoodType.Hamburger, out var hamburgers))
             {
@@ -55,14 +73,28 @@ public class PrepareAreaManager : MonoBehaviour
 
             if (hamburgers.Count < _maxHamburgerAmount)
             {
+                var bread = EventManager.OnSpawnFromBreadPool.Invoke(IngredientType.HamburgerBread, Vector3.zero, Quaternion.identity, null);
                 var hamburger = new HamburgerFood();
                 hamburger.AddIngredient(bread);
                 hamburgers.Add(hamburger);
+                var availableSlot = GetAvailableHamburgerBreadPlacementSlot();
+                availableSlot.SetIngredient(bread);
             }
             else
             {
                 Debug.LogWarning("Hamburger limit reached!");
             }
         }
+    }
+
+
+    private IngredientPlacementSlotController GetAvailableHotDogBreadPlacementSlot()
+    {
+        return _hotDogPlacementSlots.FirstOrDefault(slot => !slot.IsFull);
+    }
+    
+    private IngredientPlacementSlotController GetAvailableHamburgerBreadPlacementSlot()
+    {
+        return _hamburgerPlacementSlots.FirstOrDefault(slot => !slot.IsFull);
     }
 }

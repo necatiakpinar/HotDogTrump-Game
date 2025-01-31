@@ -21,6 +21,7 @@
     public enum IngredientResourceType
     {
         HotDogBreadResource,
+        HamburgerBreadResource,
     }
     
 }

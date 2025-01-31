@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6954434308761529772, guid: 0e9e926c11f314b4e9975e85e002156e, type: 3}
       propertyPath: m_Name
-      value: PF_HotDogIngredientResource
+      value: PF_HotDogBreadIngredientResource
       objectReference: {fileID: 0}
     - target: {fileID: 7119775618117187740, guid: 0e9e926c11f314b4e9975e85e002156e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -78,3 +78,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ingredientResourceType: 0
+  _ingredientType: 812371
