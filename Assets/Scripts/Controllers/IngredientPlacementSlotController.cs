@@ -12,8 +12,7 @@ namespace Controllers
         public void SetIngredient(BaseIngredient ingredient)
         {
             _ingredient = ingredient;
-            _ingredient.transform.SetParent(transform);
-            _ingredient.transform.localPosition = Vector3.zero;
+            _ingredient.PlaceToSlot(this);
         }
         
         public void RemoveIngredient()
