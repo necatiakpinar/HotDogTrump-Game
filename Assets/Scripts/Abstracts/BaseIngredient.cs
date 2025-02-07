@@ -1,12 +1,13 @@
 using Controllers;
 using Interfaces;
+using Managers;
 using Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Abstracts
 {
-    public abstract class BaseIngredient : MonoBehaviour, IDraggable
+    public abstract class BaseIngredient : MonoBehaviour, IDraggable, IPoolable<BaseIngredient>
     {
         [SerializeField] private IngredientType _ingredientType;
         private bool _isDragging;
@@ -16,9 +17,11 @@ namespace Abstracts
         public void OnPointerDown(PointerEventData eventData)
         {
             _isDragging = true;
+            EventManager.OnDragStarted?.Invoke();
         }
         public void OnPointerUp(PointerEventData eventData)
         {
+            EventManager.OnDragEnded?.Invoke();
             _isDragging = false;
             transform.localPosition = Vector3.zero;
         }
@@ -37,6 +40,16 @@ namespace Abstracts
             _placedSlot = slot;
             transform.SetParent(_placedSlot.transform);
             transform.localPosition = Vector3.zero;
+        }
+        public virtual void OnSpawn()
+        {
+        }
+        public virtual void ReturnToPool(BaseIngredient poolObject)
+        {
+            gameObject.SetActive(false);
+            _placedSlot.RemoveIngredient();
+            _placedSlot = null;
+            EventManager.OnReturnToPool?.Invoke(poolObject);
         }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Pools
 {
-    public class BreadPool : BasePool<BreadIngredient>
+    public class IngredientPool : BasePool<BaseIngredient>
     {
         
     }

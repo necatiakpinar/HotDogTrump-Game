@@ -41,6 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Car
+    uniqueID: 4281210779
+    locked: 0
   - name: Ingredient
     uniqueID: 935998097
+    locked: 0
+  - name: WorldUI
+    uniqueID: 2313745853
     locked: 0

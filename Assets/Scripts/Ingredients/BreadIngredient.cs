@@ -1,14 +1,13 @@
 ﻿using Abstracts;
 using Interfaces;
+using Managers;
+using UnityEngine;
 
 namespace Ingredients
 {
-    public abstract class BreadIngredient : BaseIngredient, IPoolable<BreadIngredient>
+    public abstract class BreadIngredient : BaseIngredient
     {
-        public void OnSpawn()
-        {
-        }
-        public void ReturnToPool(BreadIngredient poolObject)
+        public override void OnSpawn()
         {
         }
     }

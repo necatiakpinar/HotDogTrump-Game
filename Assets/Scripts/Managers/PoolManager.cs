@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Abstracts;
 using Ingredients;
 using Misc;
 using Pools;
@@ -8,28 +8,59 @@ namespace Managers
 {
     public class PoolManager : MonoBehaviour
     {
-        [SerializeField] private BreadPool _breadPool;
+        [SerializeField] private IngredientPool _breadPool;
+        [SerializeField] private IngredientPool _meatPool;
 
         private void OnEnable()
         {
-            EventManager.OnSpawnFromBreadPool += SpawnFromBreadPool;
+            EventManager.OnSpawnFromPool += SpawnFromPool;
+            EventManager.OnReturnToPool += ReturnToPool;
         }
-        
+
         private void OnDisable()
         {
-            EventManager.OnSpawnFromBreadPool -= SpawnFromBreadPool;
+            EventManager.OnSpawnFromPool -= SpawnFromPool;
+            EventManager.OnReturnToPool -= ReturnToPool;
         }
 
-        private BreadIngredient SpawnFromBreadPool(IngredientType ingredientType, Vector3 position, Quaternion rotation, Transform parent)
+        private BaseIngredient SpawnFromPool(IngredientType ingredientType, Vector3 position, Quaternion rotation, Transform parent)
         {
-            var bread = _breadPool.SpawnFromPool(ingredientType, position, rotation, parent);
-            if (bread == null)
+            if (IngredientTypeHelper.IsBread(ingredientType))
             {
-                Debug.LogError("Bread pool is empty!");
-                return null;
+                var bread = _breadPool.SpawnFromPool(ingredientType, position, rotation, parent);
+                if (bread == null)
+                {
+                    Debug.LogError("Bread pool is empty!");
+                    return null;
+                }
+
+                return bread;
+            }
+            else if (IngredientTypeHelper.IsMeat(ingredientType))
+            {
+                var meat = _meatPool.SpawnFromPool(ingredientType, position, rotation, parent);
+                if (meat == null)
+                {
+                    Debug.LogError("Meat pool is empty!");
+                    return null;
+                }
+
+                return meat;
             }
 
-            return bread;
+            return null;
+        }
+
+        private void ReturnToPool(BaseIngredient ingredient)
+        {
+            if (ingredient is BreadIngredient bread)
+            {
+                _breadPool.ReturnToPool(bread.IngredientType, bread);
+            }
+            else if (ingredient is MeatIngredient meat)
+            {
+                _meatPool.ReturnToPool(meat.IngredientType, meat);
+            }
         }
     }
 }

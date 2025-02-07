@@ -6,6 +6,8 @@ namespace Abstracts
     public abstract class BaseFood
     {
         protected List<BaseIngredient> _ingredients = new List<BaseIngredient>();
+        
+        public List<BaseIngredient> Ingredients => _ingredients;
 
         public void AddIngredient(BaseIngredient ingredient)
         {
@@ -15,11 +17,6 @@ namespace Abstracts
         public void RemoveIngredient(BaseIngredient ingredient)
         {
             _ingredients.Remove(ingredient);
-        }
-
-        public List<BaseIngredient> GetIngredients()
-        {
-            return _ingredients;
         }
 
         public bool HasIngredients(IngredientType ingredientType)
