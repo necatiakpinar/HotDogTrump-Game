@@ -25,6 +25,7 @@
     {
         HotDog,
         Hamburger,
+        Fries
     }
     
     public enum IngredientResourceType

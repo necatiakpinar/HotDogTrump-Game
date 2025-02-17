@@ -6,6 +6,6 @@ namespace Pools
 {
     public class IngredientPool : BasePool<BaseIngredient>
     {
-        
+       
     }
 }

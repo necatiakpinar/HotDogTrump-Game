@@ -4,6 +4,7 @@ using System.Linq;
 using Abstracts;
 using Controllers;
 using Cysharp.Threading.Tasks;
+using Interfaces;
 using Misc;
 using UnityEngine;
 
@@ -65,7 +66,11 @@ namespace Managers
                 placedMeats.Add(meat);
                 var slot = GetAvailablePlacementSlot(ingredientType);
                 if (slot != null)
+                {
                     slot.SetIngredient(meat);
+                    ICookable meatCookable = meat as ICookable;
+                    meatCookable?.Cook();
+                }
             }
         }
 
