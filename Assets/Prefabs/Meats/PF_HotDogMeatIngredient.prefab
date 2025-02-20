@@ -100,3 +100,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ingredientType: 455412
   _spriteRenderer: {fileID: 4922101612675208113}
+  _meatIngredientDataSo: {fileID: 11400000, guid: ec4de874053b24e4582ee27d6cf640f1, type: 2}

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b55bb352e14c49baa9ea0ed16f104b5b, type: 3}
+  m_Name: SO_HamburgerMeatIngredientData
+  m_EditorClassIdentifier: 
+  _rawColor: {r: 1, g: 0.4, b: 0.4, a: 1}
+  _mediumCookColor: {r: 0.8, g: 0.2, b: 0.1, a: 1}
+  _readyCookColor: {r: 0.4, g: 0.15, b: 0.1, a: 1}
+  _burntColor: {r: 0.2, g: 0.15, b: 0.1, a: 1}
+  _rawCookTime: 3
+  _mediumCookTime: 5
+  _readyCookTime: 7
+  _burntCookTime: 9
