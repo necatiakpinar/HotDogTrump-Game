@@ -10,7 +10,8 @@ namespace Managers
     {
         public static Func<IngredientType, Vector3, Quaternion, Transform, BaseIngredient> OnSpawnIngredientFromPool;
         public static Func<FoodType, Vector3, Quaternion, Transform, BaseFood> OnSpawnFoodFromPool;
-        public static Action<BaseIngredient> OnReturnToPool;
+        public static Action<BaseIngredient> OnIngredientReturnToPool;
+        public static Action<BaseFood> OnFoodReturnToPool;
         public static Action<IngredientType> OnIngredientResourceCreated;
         public static Action OnDragStarted;
         public static Action OnDragEnded;

@@ -16,14 +16,16 @@ namespace Managers
         {
             EventManager.OnSpawnIngredientFromPool += SpawnFromIngredientPool;
             EventManager.OnSpawnFoodFromPool += SpawnFromFoodPool;
-            EventManager.OnReturnToPool += ReturnToPool;
+            EventManager.OnIngredientReturnToPool += ReturnToIngredientPool;
+            EventManager.OnFoodReturnToPool += ReturnToFoodPool;
         }
 
         private void OnDisable()
         {
             EventManager.OnSpawnIngredientFromPool -= SpawnFromIngredientPool;
             EventManager.OnSpawnFoodFromPool -= SpawnFromFoodPool;
-            EventManager.OnReturnToPool -= ReturnToPool;
+            EventManager.OnIngredientReturnToPool -= ReturnToIngredientPool;
+            EventManager.OnFoodReturnToPool -= ReturnToFoodPool;
         }
 
         private BaseIngredient SpawnFromIngredientPool(IngredientType ingredientType, Vector3 position, Quaternion rotation, Transform parent)
@@ -66,7 +68,7 @@ namespace Managers
             return food;
         }
 
-        private void ReturnToPool(BaseIngredient ingredient)
+        private void ReturnToIngredientPool(BaseIngredient ingredient)
         {
             if (ingredient is BreadIngredient bread)
             {
@@ -76,6 +78,11 @@ namespace Managers
             {
                 _meatPool.ReturnToPool(meat.IngredientType, meat);
             }
+        }
+        
+        private void ReturnToFoodPool(BaseFood food)
+        {
+            _foodPool.ReturnToPool(food.FoodType, food);
         }
     }
 }

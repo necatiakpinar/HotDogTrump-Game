@@ -4,6 +4,7 @@ using Abstracts;
 using Controllers;
 using Cysharp.Threading.Tasks;
 using Foods;
+using Interfaces;
 using Misc;
 using UnityEngine;
 
@@ -74,7 +75,7 @@ namespace Managers
                     food.AddIngredient(bread);
                     foods.Add(food);
                     var availableSlot = GetAvailablePlacementSlot(ingredientType);
-                    availableSlot.SetIngredient(bread);
+                    availableSlot.SetIngredient(food);
                 }
                 else
                 {
@@ -83,19 +84,16 @@ namespace Managers
             }
         }
 
-        private void OnIngredientRemoved(BaseIngredient ingredient)
+        private void OnIngredientRemoved(ISlotPlacable removedFood)
         {
-            var ingredientType = ingredient.IngredientType;
-            var foodType = _ingredientToFoodType[ingredientType];
-            var food = _foods[foodType].FirstOrDefault(f => f.Ingredients.Contains(ingredient));
+            var food = removedFood as BaseFood;
             if (food == null)
             {
-                Debug.LogWarning("Food not found!");
+                Debug.LogError("Removed food is not a BaseFood!");
                 return;
             }
-
-            food.RemoveIngredient(ingredient);
-            _foods[foodType].Remove(food);
+            
+            _foods[food.FoodType].Remove(food);
         }
 
         private IngredientPlacementSlotController GetAvailablePlacementSlot(IngredientType ingredientType)

@@ -7,13 +7,20 @@ using UnityEngine.EventSystems;
 
 namespace Abstracts
 {
-    public abstract class BaseIngredient : MonoBehaviour, IDraggable, IPoolable<BaseIngredient>
+    public abstract class BaseIngredient : MonoBehaviour, IDraggable, ISlotPlacable, IPoolable<BaseIngredient>
     {
         [SerializeField] private IngredientType _ingredientType;
+        private Collider2D _collider;
         private bool _isDragging;
         private IngredientPlacementSlotController _placedSlot;
         
         public IngredientType IngredientType => _ingredientType;
+        public Collider2D Collider => _collider;
+        
+        private void Awake()
+        {
+            _collider = GetComponent<Collider2D>();
+        }
         public void OnPointerDown(PointerEventData eventData)
         {
             _isDragging = true;
@@ -29,12 +36,12 @@ namespace Abstracts
         {
             if (!_isDragging)
                 return;
-            
+
             var mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, 0));
             mouseWorldPosition.z = 0;
             transform.position = mouseWorldPosition;
         }
-        
+
         public void PlaceToSlot(IngredientPlacementSlotController slot)
         {
             _placedSlot = slot;
@@ -43,13 +50,17 @@ namespace Abstracts
         }
         public virtual void OnSpawn()
         {
+            _collider.enabled = true;
         }
         public virtual void ReturnToPool(BaseIngredient poolObject)
         {
             gameObject.SetActive(false);
-            _placedSlot.RemoveIngredient();
-            _placedSlot = null;
-            EventManager.OnReturnToPool?.Invoke(poolObject);
+            if (_placedSlot != null)
+            {
+                _placedSlot.RemoveIngredient();
+                _placedSlot = null;
+            }
+            EventManager.OnIngredientReturnToPool?.Invoke(poolObject);
         }
     }
 }

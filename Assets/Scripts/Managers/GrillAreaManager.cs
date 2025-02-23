@@ -74,8 +74,15 @@ namespace Managers
             }
         }
 
-        private void OnIngredientRemoved(BaseIngredient ingredient)
+        private void OnIngredientRemoved(ISlotPlacable ingredientRemove)
         {
+            var ingredient = ingredientRemove as BaseIngredient;
+            if (ingredient == null)
+            {
+                Debug.LogWarning("Ingredient is not found!");
+                return;
+            }
+            
             _meats[ingredient.IngredientType].Remove(ingredient);
         }
 

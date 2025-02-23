@@ -6,6 +6,7 @@ namespace Ingredients
     {
         public override void OnSpawn()
         {
+            base.OnSpawn();
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Controllers
     public class GarbageController : MonoBehaviour
     {
         private BaseIngredient _ingredient;
+        private BaseFood _food;
         private void OnEnable()
         {
             EventManager.OnDragEnded += DestroyGarbage;
@@ -34,6 +35,10 @@ namespace Controllers
             {
                 _ingredient = ingredient;
             }
+            else if (other.gameObject.TryGetComponent(out BaseFood food))
+            {
+                _food = food;
+            }
         }
     
         void OnTriggerExit2D(Collider2D other)
@@ -42,6 +47,10 @@ namespace Controllers
             {
                 _ingredient = null;
             }
+            else if (other.gameObject.TryGetComponent(out BaseFood food))
+            {
+                _food = null;
+            }
         }
     
         private void DestroyGarbage()
@@ -49,6 +58,11 @@ namespace Controllers
             if (_ingredient != null)
             {
                 _ingredient.ReturnToPool(_ingredient);
+            }
+            
+            if (_food != null)
+            {
+                _food.ReturnToPool(_food);
             }
         }
     }
