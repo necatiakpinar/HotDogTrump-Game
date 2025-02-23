@@ -62,7 +62,7 @@ namespace Managers
                     return;
                 }
 
-                var meat = EventManager.OnSpawnFromPool.Invoke(ingredientType, Vector3.zero, Quaternion.identity, null);
+                var meat = EventManager.OnSpawnIngredientFromPool.Invoke(ingredientType, Vector3.zero, Quaternion.identity, null);
                 placedMeats.Add(meat);
                 var slot = GetAvailablePlacementSlot(ingredientType);
                 if (slot != null)

@@ -7,22 +7,22 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Abstracts
 {
-    public class BasePool<T> : MonoBehaviour where T : MonoBehaviour, IPoolable<T>
+    public class BasePool<T,TK> : MonoBehaviour where T : MonoBehaviour, IPoolable<T> where TK: Enum
     {
-        [SerializeField] private List<PoolObject<T>> _poolObjects;
+        [SerializeField] private List<PoolObject<T,TK>> _poolObjects;
 
-        private Dictionary<IngredientType, Queue<T>> _poolDictionary;
-        private Dictionary<IngredientType, T> _prefabDictionary;
+        private Dictionary<TK, Queue<T>> _poolDictionary;
+        private Dictionary<TK, T> _prefabDictionary;
 
         private void OnEnable()
         {
-            _poolDictionary = new Dictionary<IngredientType, Queue<T>>();
-            _prefabDictionary = new Dictionary<IngredientType, T>();
+            _poolDictionary = new Dictionary<TK, Queue<T>>();
+            _prefabDictionary = new Dictionary<TK, T>();
 
             foreach (var poolObject in _poolObjects)
             {
-                _poolDictionary[poolObject.IngredientType] = new Queue<T>();
-                _prefabDictionary[poolObject.IngredientType] = poolObject.ObjectPf;
+                _poolDictionary[poolObject.ObjectType] = new Queue<T>();
+                _prefabDictionary[poolObject.ObjectType] = poolObject.ObjectPf;
             }
             
             Init();
@@ -33,18 +33,18 @@ namespace Abstracts
             for (int i = 0; i < _poolObjects.Count; i++)
             {
                 var poolObject = _poolObjects[i];
-                _poolDictionary[poolObject.IngredientType] = new Queue<T>();
+                _poolDictionary[poolObject.ObjectType] = new Queue<T>();
                 var prefab = poolObject.ObjectPf;
                 for (int j = 0; j < poolObject.Size; j++)
                 {
                     var createdPoolObject = Instantiate(prefab, transform);
-                    _poolDictionary[poolObject.IngredientType].Enqueue(createdPoolObject);
+                    _poolDictionary[poolObject.ObjectType].Enqueue(createdPoolObject);
                     createdPoolObject.gameObject.SetActive(false);
                 }
             }
         }
 
-        public T SpawnFromPool(IngredientType ingredientType, Vector3 position, Quaternion rotation = default, Transform parent = null)
+        public T SpawnFromPool(TK ingredientType, Vector3 position, Quaternion rotation = default, Transform parent = null)
         {
             if (!_poolDictionary.TryGetValue(ingredientType, out var objectQueue))
             {
@@ -82,7 +82,7 @@ namespace Abstracts
             return objectToSpawn;
         }
 
-        public void ReturnToPool(IngredientType ingredientType, T poolObject)
+        public void ReturnToPool(TK ingredientType, T poolObject)
         {
             if (!_poolDictionary.ContainsKey(ingredientType))
             {

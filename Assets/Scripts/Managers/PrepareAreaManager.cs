@@ -22,13 +22,7 @@ namespace Managers
             { IngredientType.HotDogBread, FoodType.HotDog },
             { IngredientType.HamburgerBread, FoodType.Hamburger },
         };
-
-        private readonly Dictionary<IngredientType, BaseFood> _ingredientToFoodObject = new()
-        {
-            { IngredientType.HotDogBread, new HotDogFood() },
-            { IngredientType.HamburgerBread, new HamburgerFood() },
-        };
-
+        
         private readonly int _maxFoodAmount = 3;
 
         private void OnEnable()
@@ -75,8 +69,8 @@ namespace Managers
 
                 if (foods.Count < _maxFoodAmount)
                 {
-                    var bread = EventManager.OnSpawnFromPool.Invoke(ingredientType, Vector3.zero, Quaternion.identity, null);
-                    var food = _ingredientToFoodObject[ingredientType];
+                    var bread = EventManager.OnSpawnIngredientFromPool.Invoke(ingredientType, Vector3.zero, Quaternion.identity, null);
+                    var food = EventManager.OnSpawnFoodFromPool.Invoke(foodType, Vector3.zero, Quaternion.identity, null);
                     food.AddIngredient(bread);
                     foods.Add(food);
                     var availableSlot = GetAvailablePlacementSlot(ingredientType);

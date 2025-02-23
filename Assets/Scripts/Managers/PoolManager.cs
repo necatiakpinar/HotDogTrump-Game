@@ -10,20 +10,23 @@ namespace Managers
     {
         [SerializeField] private IngredientPool _breadPool;
         [SerializeField] private IngredientPool _meatPool;
+        [SerializeField] private FoodPool _foodPool;
 
         private void OnEnable()
         {
-            EventManager.OnSpawnFromPool += SpawnFromPool;
+            EventManager.OnSpawnIngredientFromPool += SpawnFromIngredientPool;
+            EventManager.OnSpawnFoodFromPool += SpawnFromFoodPool;
             EventManager.OnReturnToPool += ReturnToPool;
         }
 
         private void OnDisable()
         {
-            EventManager.OnSpawnFromPool -= SpawnFromPool;
+            EventManager.OnSpawnIngredientFromPool -= SpawnFromIngredientPool;
+            EventManager.OnSpawnFoodFromPool -= SpawnFromFoodPool;
             EventManager.OnReturnToPool -= ReturnToPool;
         }
 
-        private BaseIngredient SpawnFromPool(IngredientType ingredientType, Vector3 position, Quaternion rotation, Transform parent)
+        private BaseIngredient SpawnFromIngredientPool(IngredientType ingredientType, Vector3 position, Quaternion rotation, Transform parent)
         {
             if (IngredientTypeHelper.IsBread(ingredientType))
             {
@@ -49,6 +52,18 @@ namespace Managers
             }
 
             return null;
+        }
+        
+        private BaseFood SpawnFromFoodPool(FoodType foodType, Vector3 position, Quaternion rotation, Transform parent)
+        {
+            var food = _foodPool.SpawnFromPool(foodType, position, rotation, parent);
+            if (food == null)
+            {
+                Debug.LogError("Food pool is empty!");
+                return null;
+            }
+
+            return food;
         }
 
         private void ReturnToPool(BaseIngredient ingredient)

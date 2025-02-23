@@ -25,7 +25,6 @@ namespace Controllers
         {
             _ingredient = ingredient;
             _ingredient.PlaceToSlot(this);
-            
         }
         
         public void RemoveIngredient()

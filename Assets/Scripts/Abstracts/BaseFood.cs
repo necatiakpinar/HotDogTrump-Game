@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using Interfaces;
 using Misc;
+using UnityEngine;
 
 namespace Abstracts
 {
-    public abstract class BaseFood
+    public abstract class BaseFood : MonoBehaviour, IPoolable<BaseFood>
     {
         protected List<BaseIngredient> _ingredients = new List<BaseIngredient>();
         
@@ -22,6 +24,12 @@ namespace Abstracts
         public bool HasIngredients(IngredientType ingredientType)
         {
             return _ingredients.Exists(ingredient => ingredient.IngredientType == ingredientType);
+        }
+        public void OnSpawn()
+        {
+        }
+        public void ReturnToPool(BaseFood poolObject)
+        {
         }
     }
 }

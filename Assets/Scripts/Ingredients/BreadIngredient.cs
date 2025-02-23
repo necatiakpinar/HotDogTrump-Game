@@ -1,7 +1,4 @@
 ﻿using Abstracts;
-using Interfaces;
-using Managers;
-using UnityEngine;
 
 namespace Ingredients
 {
