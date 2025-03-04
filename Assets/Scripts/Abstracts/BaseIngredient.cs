@@ -1,3 +1,4 @@
+using System;
 using Controllers;
 using Interfaces;
 using Managers;
@@ -11,8 +12,9 @@ namespace Abstracts
     {
         [SerializeField] private IngredientType _ingredientType;
         private Collider2D _collider;
-        private bool _isDragging;
+        protected bool isDragging;
         private IngredientPlacementSlotController _placedSlot;
+        private BaseFood _food;
         
         public IngredientType IngredientType => _ingredientType;
         public Collider2D Collider => _collider;
@@ -23,23 +25,44 @@ namespace Abstracts
         }
         public void OnPointerDown(PointerEventData eventData)
         {
-            _isDragging = true;
+            isDragging = true;
             EventManager.OnDragStarted?.Invoke();
         }
         public void OnPointerUp(PointerEventData eventData)
         {
             EventManager.OnDragEnded?.Invoke();
-            _isDragging = false;
-            transform.localPosition = Vector3.zero;
+            isDragging = false;
+            
+            if (_food != null)
+            {
+                _food.AddIngredient(this);
+            }
+            else
+            {
+                transform.localPosition = Vector3.zero;
+            }
         }
         public void OnDrag(PointerEventData eventData)
         {
-            if (!_isDragging)
+            if (!isDragging)
                 return;
 
             var mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, 0));
             mouseWorldPosition.z = 0;
             transform.position = mouseWorldPosition;
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.TryGetComponent(out BaseFood food))
+                _food = food;
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.TryGetComponent(out BaseFood food))
+                if (_food == food)
+                    _food = null;
         }
 
         public void PlaceToSlot(IngredientPlacementSlotController slot)

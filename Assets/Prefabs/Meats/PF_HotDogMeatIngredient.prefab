@@ -64,6 +64,18 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.9811321
       objectReference: {fileID: 0}
+    - target: {fileID: 2908903261546326421, guid: 9b9ad2df7ec393340a617fc6df173a9e, type: 3}
+      propertyPath: m_SortingOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3701736914264831204, guid: 9b9ad2df7ec393340a617fc6df173a9e, type: 3}
+      propertyPath: m_Size.x
+      value: 0.23365253
+      objectReference: {fileID: 0}
+    - target: {fileID: 3701736914264831204, guid: 9b9ad2df7ec393340a617fc6df173a9e, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.000000029802322
+      objectReference: {fileID: 0}
     - target: {fileID: 6451962438447824079, guid: 9b9ad2df7ec393340a617fc6df173a9e, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.25
