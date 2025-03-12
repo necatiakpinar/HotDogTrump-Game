@@ -3,6 +3,7 @@ using Abstracts;
 using Cysharp.Threading.Tasks;
 using Data.ScriptableObjects;
 using Interfaces;
+using Misc;
 using UnityEngine;
 
 namespace Ingredients
@@ -13,19 +14,32 @@ namespace Ingredients
         [SerializeField] protected MeatIngredientDataSo _meatIngredientDataSo;
 
         private float _currentCookTime;
+        protected CookableIngredientStateType cookingState;
+        public CookableIngredientStateType CookingState => cookingState;
 
         public override void OnSpawn()
         {
             base.OnSpawn();
             _currentCookTime = 0;
             _spriteRenderer.color = _meatIngredientDataSo.RawColor;
-            
+            cookingState = CookableIngredientStateType.Raw;
         }
+
         public async virtual UniTask Cook()
         {
             _spriteRenderer.color = _meatIngredientDataSo.RawColor;
         }
-        
+
+        protected override void TryToPlaceInFood()
+        {
+            if (food && cookingState != CookableIngredientStateType.Burned)
+            {
+                cookingState = CookableIngredientStateType.Cooked;
+            }
+            
+            base.TryToPlaceInFood();
+        }
+
         protected void Update()
         {
             TryToCookMeat();
@@ -35,11 +49,11 @@ namespace Ingredients
         {
             if (_currentCookTime < _meatIngredientDataSo.BurntCookTime)
             {
-                if (isDragging)
+                if (isDragging || cookingState == CookableIngredientStateType.Cooked)
                     return;
-                
+
                 _currentCookTime += Time.deltaTime;
-                
+
                 if (_currentCookTime >= _meatIngredientDataSo.RawCookTime && _currentCookTime < _meatIngredientDataSo.MediumCookTime)
                 {
                     _spriteRenderer.color = _meatIngredientDataSo.MediumCookColor;
@@ -52,6 +66,10 @@ namespace Ingredients
                 {
                     _spriteRenderer.color = _meatIngredientDataSo.BurntColor;
                 }
+            }
+            else
+            {
+                cookingState = CookableIngredientStateType.Burned;
             }
         }
     }

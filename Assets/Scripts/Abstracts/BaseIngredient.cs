@@ -12,9 +12,9 @@ namespace Abstracts
     {
         [SerializeField] private IngredientType _ingredientType;
         private Collider2D _collider;
-        protected bool isDragging;
         private IngredientPlacementSlotController _placedSlot;
-        private BaseFood _food;
+        protected bool isDragging;
+        protected BaseFood food;
         
         public IngredientType IngredientType => _ingredientType;
         public Collider2D Collider => _collider;
@@ -33,9 +33,13 @@ namespace Abstracts
             EventManager.OnDragEnded?.Invoke();
             isDragging = false;
             
-            if (_food != null)
+            TryToPlaceInFood();
+        }
+        protected virtual void TryToPlaceInFood()
+        {
+            if (food != null)
             {
-                _food.AddIngredient(this);
+                food.AddIngredient(this);
             }
             else
             {
@@ -55,14 +59,14 @@ namespace Abstracts
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.TryGetComponent(out BaseFood food))
-                _food = food;
+                this.food = food;
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
             if (other.TryGetComponent(out BaseFood food))
-                if (_food == food)
-                    _food = null;
+                if (this.food == food)
+                    this.food = null;
         }
 
         public void PlaceToSlot(IngredientPlacementSlotController slot)

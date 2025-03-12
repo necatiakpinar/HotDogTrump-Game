@@ -28,6 +28,13 @@
         Fries
     }
     
+    public enum CookableIngredientStateType
+    {
+        Raw,
+        Cooked,
+        Burned
+    }
+    
     public enum IngredientResourceType
     {
         HotDogBreadResource,
