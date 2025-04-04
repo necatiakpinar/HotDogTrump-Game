@@ -27,6 +27,12 @@
         Hamburger,
         Fries
     }
+
+    public enum CustomerType
+    {
+        NormalCustomer,
+        VIPCustomer,
+    }
     
     public enum CookableIngredientStateType
     {

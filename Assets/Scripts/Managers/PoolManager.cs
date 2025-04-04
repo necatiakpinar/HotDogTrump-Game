@@ -11,21 +11,26 @@ namespace Managers
         [SerializeField] private IngredientPool _breadPool;
         [SerializeField] private IngredientPool _meatPool;
         [SerializeField] private FoodPool _foodPool;
+        [SerializeField] private CustomerPool _customerPool;
 
         private void OnEnable()
         {
             EventManager.OnSpawnIngredientFromPool += SpawnFromIngredientPool;
             EventManager.OnSpawnFoodFromPool += SpawnFromFoodPool;
+            EventManager.OnSpawnCustomerFromPool += SpawnFromCustomerPool;
             EventManager.OnIngredientReturnToPool += ReturnToIngredientPool;
             EventManager.OnFoodReturnToPool += ReturnToFoodPool;
+            EventManager.OnCustomerReturnToPool += ReturnToCustomerPool;
         }
 
         private void OnDisable()
         {
             EventManager.OnSpawnIngredientFromPool -= SpawnFromIngredientPool;
             EventManager.OnSpawnFoodFromPool -= SpawnFromFoodPool;
+            EventManager.OnSpawnCustomerFromPool -= SpawnFromCustomerPool;
             EventManager.OnIngredientReturnToPool -= ReturnToIngredientPool;
             EventManager.OnFoodReturnToPool -= ReturnToFoodPool;
+            EventManager.OnCustomerReturnToPool -= ReturnToCustomerPool;
         }
 
         private BaseIngredient SpawnFromIngredientPool(IngredientType ingredientType, Vector3 position, Quaternion rotation, Transform parent)
@@ -55,7 +60,7 @@ namespace Managers
 
             return null;
         }
-        
+
         private BaseFood SpawnFromFoodPool(FoodType foodType, Vector3 position, Quaternion rotation, Transform parent)
         {
             var food = _foodPool.SpawnFromPool(foodType, position, rotation, parent);
@@ -66,6 +71,18 @@ namespace Managers
             }
 
             return food;
+        }
+
+        private BaseCustomer SpawnFromCustomerPool(CustomerType customerType, Vector3 position, Quaternion rotation, Transform parent)
+        {
+            var customer = _customerPool.SpawnFromPool(customerType, position, rotation, parent);
+            if (customer == null)
+            {
+                Debug.LogError("Customer pool is empty!");
+                return null;
+            }
+
+            return customer;
         }
 
         private void ReturnToIngredientPool(BaseIngredient ingredient)
@@ -79,10 +96,15 @@ namespace Managers
                 _meatPool.ReturnToPool(meat.IngredientType, meat);
             }
         }
-        
+
         private void ReturnToFoodPool(BaseFood food)
         {
             _foodPool.ReturnToPool(food.FoodType, food);
+        }
+        
+        private void ReturnToCustomerPool(BaseCustomer customer)
+        {
+            _customerPool.ReturnToPool(customer.CustomerType, customer);
         }
     }
 }
