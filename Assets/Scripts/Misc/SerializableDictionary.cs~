@@ -1,0 +1,7 @@
+﻿namespace Misc
+{
+    public class SerializableDictionary
+    {
+        
+    }
+}

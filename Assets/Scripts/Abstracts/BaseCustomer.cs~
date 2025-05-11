@@ -90,7 +90,6 @@ namespace Abstracts
                 if (ingredient is ICookable cookable)
                 {
                     var coinToPay = _properties.IngredientCurrencyDictionary[cookable.CookingState];
-                    Debug.LogError(coinToPay);
                 }
             }
             

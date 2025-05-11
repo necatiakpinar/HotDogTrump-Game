@@ -37,7 +37,6 @@
     public enum CookableIngredientStateType
     {
         Raw,
-        MediumCooked,
         Cooked,
         Burned
     }

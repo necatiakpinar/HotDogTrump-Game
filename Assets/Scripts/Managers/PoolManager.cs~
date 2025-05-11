@@ -104,7 +104,7 @@ namespace Managers
         
         private void ReturnToCustomerPool(BaseCustomer customer)
         {
-            _customerPool.ReturnToPool(customer.Properties.CustomerType, customer);
+            _customerPool.ReturnToPool(customer.CustomerType, customer);
         }
     }
 }

@@ -77,6 +77,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32ed862940bd415db1ee73aadc9f94f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _properties: {fileID: 11400000, guid: 34d58d8fc6932eb43add66d9169dc536, type: 2}
   _orderLabel: {fileID: 6180233427627915070}
 --- !u!114 &6180233427627915070 stripped
 MonoBehaviour:
